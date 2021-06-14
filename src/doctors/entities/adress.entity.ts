@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('adress')
 export class Adress {
   @PrimaryGeneratedColumn()
   id: number;
@@ -16,9 +16,6 @@ export class Adress {
 
   @Column()
   district: string;
-
-  @Column()
-  phone: string;
 
   @Column()
   city: string;

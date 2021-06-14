@@ -11,14 +11,15 @@ export class createDoctor1623682946074 implements MigrationInterface {
             type: 'int',
             isPrimary: true,
             isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'name',
-            type: 'varchar[120]',
+            type: 'varchar',
           },
           {
             name: 'crm',
-            type: 'int[7]',
+            type: 'int',
           },
           {
             name: 'phone',
@@ -37,6 +38,7 @@ export class createDoctor1623682946074 implements MigrationInterface {
           {
             name: 'deletedAt',
             type: 'timestamp',
+            isNullable: true,
             default: 'null',
           },
           {

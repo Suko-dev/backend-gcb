@@ -13,7 +13,7 @@ import {
 import { Adress } from './adress.entity';
 import { Specialty } from './specialty.entity';
 
-@Entity()
+@Entity('doctors')
 export class Doctor {
   @PrimaryGeneratedColumn()
   id: number;
@@ -31,19 +31,19 @@ export class Doctor {
   cellphone: number;
 
   @ManyToOne(() => Adress)
-  @JoinColumn({ name: 'adress_id' })
-  adress: Adress;
+  @JoinColumn({ name: 'adress' })
+  adress_id: Adress;
+
+  @Column()
+  adress: number;
 
   @ManyToMany(() => Specialty)
   @JoinTable({
-    name: 'specialtiesDoctors',
+    name: 'specialtiesdoctors',
     joinColumns: [{ name: 'doctor_id' }],
     inverseJoinColumns: [{ name: 'specialty_id' }],
   })
   specialties: Specialty[];
-
-  @Column()
-  specitaly_id: number;
 
   @DeleteDateColumn()
   deletedAt: Date;
