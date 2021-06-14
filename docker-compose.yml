@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+    database:
+        image: postgres
+        container_name: database
+        restart: always
+        ports: 
+            - 5432:5432
+        environment: 
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=docker
+            - POSTGRES_DB=gbc
+        volumes: 
+            - pgdata:/data/postgres
+    app:
+        build: .
+        container_name: medRegister
+        ports: 
+            - 3000:3000
+        volumes: 
+            - .:/app/server
+        links:
+            - database
+        depends_on: 
+            - database
+
+volumes: 
+    pgdata:
+        driver: local
