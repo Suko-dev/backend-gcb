@@ -21,7 +21,7 @@ export class Doctor {
   @Column({ length: 120 })
   name: string;
 
-  @Column({ length: 7 })
+  @Column()
   crm: number;
 
   @Column()
@@ -36,7 +36,7 @@ export class Doctor {
 
   @ManyToMany(() => Specialty)
   @JoinTable({
-    name: 'SpecialtiesDoctors',
+    name: 'specialtiesDoctors',
     joinColumns: [{ name: 'doctor_id' }],
     inverseJoinColumns: [{ name: 'specialty_id' }],
   })

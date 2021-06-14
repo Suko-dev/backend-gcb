@@ -1,0 +1,13 @@
+{
+    "type": "postgres",
+    "port": 5432,
+    "host": "localhost", 
+    "username": "postgres",
+    "password": "docker",
+    "database": "GCB", 
+    "migrations": ["src/shared/database/typeorm/migrations/*.ts"],
+    "entities": ["src/**/entities/*.entity.ts"],
+    "cli": {
+      "migrationsDir": "src/shared/database/typeorm/migrations"
+    }
+  }
