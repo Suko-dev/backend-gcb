@@ -5,8 +5,7 @@
     "username": "postgres",
     "password": "docker",
     "database": "GCB", 
-    "migrations": ["src/shared/database/typeorm/migrations/*.ts"],
-    "entities": ["src/**/entities/*.entity.ts"],
+    "migrations": ["src/shared/database/typeorm/migrations/*.ts"], 
     "cli": {
       "migrationsDir": "src/shared/database/typeorm/migrations"
     }
