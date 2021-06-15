@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Specialty } from './entities/specialty.entity';
@@ -13,9 +13,9 @@ export class SpecialtyService {
     private specialtyDoctorRepository: Repository<SpecialtyDoctor>,
   ) {}
 
-  async create(name: string): Promise<Specialty> {
-    const specialty = this.specialtyRepository.create({ specialty: name });
-    return this.specialtyRepository.save(specialty);
+  async create(specialty: string): Promise<Specialty> {
+    const newspecialty = this.specialtyRepository.create({ specialty });
+    return this.specialtyRepository.save(newspecialty);
   }
 
   async findId(specialtyName: string): Promise<number> {
@@ -23,22 +23,26 @@ export class SpecialtyService {
       specialty: specialtyName,
     });
     if (!specialty) {
-      throw new HttpException('specialty not exits', HttpStatus.NOT_FOUND);
+      return undefined;
     }
     return specialty.id;
   }
-  async validateSpecialty(specialties: string[]) {
-    specialties.map(
-      async (item) =>
-        await this.specialtyRepository.findOneOrFail({ specialty: item }),
-    );
-  }
 
-  async createRelation(specialty_id: number, doctor_id: number) {
-    const relation = this.specialtyDoctorRepository.create({
-      specialty_id,
-      doctor_id,
-    });
+  async createRelation(specialties: string[], doctor_id: number) {
+    let relation;
+    await Promise.all(
+      specialties.map(async (item) => {
+        let specialty_id = await this.findId(item);
+        if (!specialty_id) {
+          const { id } = await this.create(item);
+          specialty_id = id;
+        }
+        relation = this.specialtyDoctorRepository.create({
+          specialty_id,
+          doctor_id,
+        });
+      }),
+    );
     await this.specialtyDoctorRepository.save(relation);
   }
 

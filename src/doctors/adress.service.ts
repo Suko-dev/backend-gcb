@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import getCep from 'src/shared/utils/getCep';
+import axios from 'axios';
 import { Repository } from 'typeorm';
 import { CreateAdressDto } from './dto/create-adress.dto';
 import { Adress } from './entities/adress.entity';
@@ -17,10 +17,15 @@ export class AdressService {
     return this.adressRepository.save(newAdress);
   }
 
+  async getAdress(cep: number) {
+    const { data } = await axios.get(`http://viacep.com.br/ws/${cep}/json/`);
+    return data;
+  }
+
   async findId(cep: number): Promise<number> {
     let adress = await this.adressRepository.findOne({ cep });
     if (!adress) {
-      const { bairro, logradouro, localidade, uf } = await getCep(cep);
+      const { bairro, logradouro, localidade, uf } = await this.getAdress(cep);
       adress = await this.create({
         cep,
         district: bairro,
