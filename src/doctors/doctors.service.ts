@@ -32,14 +32,9 @@ export class DoctorsService {
       phone,
       adress_id,
     });
-    await this.specialtyService.validateSpecialty(specialties);
     const savedDoctor = await this.doctorsRepository.save(newdoctor);
-    await Promise.all(
-      specialties.map(async (item) => {
-        const id = await this.specialtyService.findId(item);
-        await this.specialtyService.createRelation(id, savedDoctor.id);
-      }),
-    );
+    await this.specialtyService.createRelation(specialties, savedDoctor.id);
+
     const doctor = this.doctorsRepository.findOne(
       { crm },
       { relations: ['adress', 'specialties'] },
@@ -47,8 +42,8 @@ export class DoctorsService {
     return doctor;
   }
 
-  findOne(id: number) {
-    return this.doctorsRepository.findOneOrFail(id, {
+  async findOne(id: number) {
+    return await this.doctorsRepository.findOneOrFail(id, {
       relations: ['adress', 'specialties'],
     });
   }
@@ -68,8 +63,10 @@ export class DoctorsService {
         'adress.district ',
         'adress.state as state',
         'adress.cep as cep',
+        'speciatly.specialty as speciatly',
       ])
-      .leftJoin('doctor.adress', 'adress');
+      .leftJoin('doctor.adress', 'adress')
+      .leftJoin('doctor.specialties', 'speciatly');
     if (crm) {
       queryBuilder.andWhere(`crm='${crm}'`);
     }
@@ -86,7 +83,7 @@ export class DoctorsService {
       queryBuilder.andWhere(`${key} like '%${query[key]}%'`);
     });
 
-    queryBuilder.skip(skip || 0).limit(limit || 10);
+    queryBuilder.offset(skip || 0).limit(limit || 10);
     return await queryBuilder.execute();
   }
 
@@ -95,12 +92,7 @@ export class DoctorsService {
     const { specialties, ...user } = updateDoctorDto;
     if (specialties) {
       await this.specialtyService.deleteRelation(id);
-      specialties.map(async (item) => {
-        const specialty = await this.specialtyService.findId(item);
-        if (!specialty) {
-          await this.specialtyService.createRelation(specialty, id);
-        }
-      });
+      await this.specialtyService.createRelation(specialties, id);
     }
     return this.doctorsRepository.update(id, user);
   }
@@ -108,6 +100,5 @@ export class DoctorsService {
   async remove(id: number) {
     await this.doctorsRepository.findOneOrFail(id);
     await this.doctorsRepository.softDelete(id);
-    return this.doctorsRepository.findOne(id);
   }
 }
