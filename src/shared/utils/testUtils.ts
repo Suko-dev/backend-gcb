@@ -11,7 +11,7 @@ export default class testUtil {
     doctor.created_at = new Date();
     doctor.crm = 1;
     doctor.deleted_at = null;
-    doctor.name = 'ze';
+    doctor.name = 'teste';
     doctor.phone = 1;
     doctor.updated_at = new Date();
     return doctor;
@@ -19,7 +19,7 @@ export default class testUtil {
   static giveAValidSpecialty(): Specialty {
     const specialty = new Specialty();
     specialty.id = 1;
-    specialty.specialty = 'a';
+    specialty.specialty = 'teste';
     specialty.created_at = new Date();
     specialty.updated_at = new Date();
     return specialty;
@@ -29,20 +29,20 @@ export default class testUtil {
     const doctor = new CreateDoctorDto();
     doctor.cellphone = 11;
     doctor.crm = 1;
-    doctor.name = 'ze';
+    doctor.name = 'teste';
     doctor.phone = 1;
     doctor.cep = 3630000;
-    doctor.specialties = ['a', 'b'];
+    doctor.specialties = ['teste1', 'teste2'];
     return doctor;
   }
   static giveAValidAdress(): Adress {
     const adress = new Adress();
     adress.cep = 1;
-    adress.city = 'a';
-    adress.district = 'a';
+    adress.city = 'testeCity';
+    adress.district = 'testeDistrict';
     adress.id = 1;
-    adress.state = 'a';
-    adress.street = 'a';
+    adress.state = 'testeState';
+    adress.street = 'testeStreet';
     adress.updated_at = new Date();
     adress.created_at = new Date();
     return adress;

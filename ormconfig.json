@@ -4,7 +4,7 @@
     "host": "localhost", 
     "username": "postgres",
     "password": "docker",
-    "database": "GCB", 
+    "database": "gbc", 
     "migrations": ["src/shared/database/typeorm/migrations/*.ts"], 
     "cli": {
       "migrationsDir": "src/shared/database/typeorm/migrations"

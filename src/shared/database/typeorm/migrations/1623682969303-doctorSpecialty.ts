@@ -4,7 +4,7 @@ export class doctorSpecialty1623682969303 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'specialtiesdoctors',
+        name: 'doctors_specialties_specialties',
         columns: [
           {
             name: 'id',
@@ -13,11 +13,11 @@ export class doctorSpecialty1623682969303 implements MigrationInterface {
             isGenerated: true,
           },
           {
-            name: 'doctor_id',
+            name: 'doctorsId',
             type: 'int',
           },
           {
-            name: 'specialty_id',
+            name: 'specialtiesId',
             type: 'int',
           },
           {
@@ -31,7 +31,7 @@ export class doctorSpecialty1623682969303 implements MigrationInterface {
             name: 'fkDoctorSpecialty',
             referencedTableName: 'doctors',
             referencedColumnNames: ['id'],
-            columnNames: ['doctor_id'],
+            columnNames: ['doctorsId'],
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
           },
@@ -39,7 +39,7 @@ export class doctorSpecialty1623682969303 implements MigrationInterface {
             name: 'fkSpecialtyDoctor',
             referencedTableName: 'specialties',
             referencedColumnNames: ['id'],
-            columnNames: ['specialty_id'],
+            columnNames: ['specialtiesId'],
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
           },
@@ -49,6 +49,6 @@ export class doctorSpecialty1623682969303 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('specialtiesdoctors');
+    await queryRunner.dropTable('doctors_specialties_specialties');
   }
 }

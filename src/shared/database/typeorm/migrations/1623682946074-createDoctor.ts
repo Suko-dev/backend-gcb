@@ -31,7 +31,7 @@ export class createDoctor1623682946074 implements MigrationInterface {
             type: 'bigint',
           },
           {
-            name: 'adress_id',
+            name: 'adressId',
             type: 'int',
             isNullable: true,
             default: 'null',
@@ -58,7 +58,7 @@ export class createDoctor1623682946074 implements MigrationInterface {
             name: 'fkDoctorAdress',
             referencedTableName: 'adress',
             referencedColumnNames: ['id'],
-            columnNames: ['adress_id'],
+            columnNames: ['adressId'],
             onDelete: 'SET NULL',
             onUpdate: 'SET NULL',
           },

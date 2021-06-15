@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { QueryDoctorDto } from './dto/query-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -30,7 +31,7 @@ export class DoctorsController {
   }
 
   @Get()
-  findMany(@Query() query) {
+  findMany(@Query() query: QueryDoctorDto) {
     return this.doctorsService.findMany(query);
   }
 

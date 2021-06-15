@@ -5,7 +5,6 @@ import { DoctorsService } from './doctors.service';
 import { Adress } from './entities/adress.entity';
 import { Doctor } from './entities/doctor.entity';
 import { Specialty } from './entities/specialty.entity';
-import { SpecialtyDoctor } from './entities/specialtyDoctor.entity';
 import { SpecialtyService } from './specialty.service';
 import testUtil from '../shared/utils/testUtils';
 
@@ -33,10 +32,6 @@ describe('SpecialtyService', () => {
           provide: getRepositoryToken(Specialty),
           useValue: mockRepository,
         },
-        {
-          provide: getRepositoryToken(SpecialtyDoctor),
-          useValue: mockRepository,
-        },
       ],
     }).compile();
 
@@ -56,6 +51,6 @@ describe('SpecialtyService', () => {
   });
 
   it('should be able to find an adress id given its cep', async () => {
-    expect(await adressService.findId(1)).toBe(adress.id);
+    expect(await adressService.findByCep(1)).toBe(adress);
   });
 });

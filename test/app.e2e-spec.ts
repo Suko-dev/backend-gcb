@@ -6,7 +6,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Doctor } from '../src/doctors/entities/doctor.entity';
 import { Adress } from '../src/doctors/entities/adress.entity';
 import { Specialty } from '../src/doctors/entities/specialty.entity';
-import { SpecialtyDoctor } from '../src/doctors/entities/specialtyDoctor.entity';
 import testUtil from '../src/shared/utils/testUtils';
 
 describe('DoctorController (e2e)', () => {
@@ -19,10 +18,31 @@ describe('DoctorController (e2e)', () => {
     cellphone: 1,
     crm: 1,
     deleted_at: null,
-    name: 'ze',
+    name: 'teste',
     phone: 1,
     created_at: expect.any(String),
     updated_at: expect.any(String),
+    specialties: [
+      {
+        created_at: expect.any(String),
+        specialty: 'teste',
+        updated_at: expect.any(String),
+      },
+      {
+        created_at: expect.any(String),
+        specialty: 'teste',
+        updated_at: expect.any(String),
+      },
+    ],
+    adress: {
+      cep: 1,
+      city: 'testeCity',
+      created_at: expect.any(String),
+      district: 'testeDistrict',
+      state: 'testeState',
+      street: 'testeStreet',
+      updated_at: expect.any(String),
+    },
   };
 
   const mockDocRepository = {
@@ -43,11 +63,6 @@ describe('DoctorController (e2e)', () => {
     save: jest.fn().mockReturnValue(specialty),
     findOne: jest.fn().mockReturnValue(specialty),
   };
-  const mockRelationRepository = {
-    create: jest.fn(),
-    save: jest.fn(),
-    delete: jest.fn(),
-  };
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -59,8 +74,6 @@ describe('DoctorController (e2e)', () => {
       .useValue(mockAdressRepository)
       .overrideProvider(getRepositoryToken(Specialty))
       .useValue(mockSpecialtyRepository)
-      .overrideProvider(getRepositoryToken(SpecialtyDoctor))
-      .useValue(mockRelationRepository)
       .compile();
 
     app = moduleFixture.createNestApplication();

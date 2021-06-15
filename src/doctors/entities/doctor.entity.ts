@@ -7,7 +7,6 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-  JoinColumn,
   ManyToMany,
   JoinTable,
 } from 'typeorm';
@@ -20,31 +19,23 @@ export class Doctor {
   @Exclude()
   id: number;
 
-  @Column({ length: 120 })
+  @Column({ length: 120, nullable: true })
   name: string;
 
   @Column()
   crm: number;
 
-  @Column()
+  @Column({ nullable: true })
   phone: number;
 
-  @Column()
+  @Column({ nullable: true })
   cellphone: number;
 
   @ManyToOne(() => Adress)
-  @JoinColumn({ name: 'adress_id' })
   adress: Adress;
 
-  @Column({ select: false })
-  adress_id: number;
-
   @ManyToMany(() => Specialty)
-  @JoinTable({
-    name: 'specialtiesdoctors',
-    joinColumns: [{ name: 'doctor_id' }],
-    inverseJoinColumns: [{ name: 'specialty_id' }],
-  })
+  @JoinTable()
   specialties: Specialty[];
 
   @DeleteDateColumn({ select: false })

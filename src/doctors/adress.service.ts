@@ -22,7 +22,7 @@ export class AdressService {
     return data;
   }
 
-  async findId(cep: number): Promise<number> {
+  async findByCep(cep: number): Promise<Adress> {
     let adress = await this.adressRepository.findOne({ cep });
     if (!adress) {
       const { bairro, logradouro, localidade, uf } = await this.getAdress(cep);
@@ -34,6 +34,6 @@ export class AdressService {
         state: uf,
       });
     }
-    return adress.id;
+    return adress;
   }
 }

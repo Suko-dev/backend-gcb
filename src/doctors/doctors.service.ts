@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AdressService } from './adress.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { QueryDoctorDto } from './dto/query-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { Doctor } from './entities/doctor.entity';
 import { SpecialtyService } from './specialty.service';
@@ -24,22 +25,19 @@ export class DoctorsService {
     phone,
     specialties,
   }: CreateDoctorDto): Promise<Doctor> {
-    const adress_id = await this.adressService.findId(cep);
-    const newdoctor = this.doctorsRepository.create({
+    const adress = await this.adressService.findByCep(cep);
+    const doctor = this.doctorsRepository.create({
       name,
       cellphone,
       crm,
       phone,
-      adress_id,
     });
-    const savedDoctor = await this.doctorsRepository.save(newdoctor);
-    await this.specialtyService.createRelation(specialties, savedDoctor.id);
-
-    const doctor = this.doctorsRepository.findOne(
-      { crm },
-      { relations: ['adress', 'specialties'] },
+    doctor.adress = adress;
+    doctor.specialties = await this.specialtyService.getSpecialties(
+      specialties,
     );
-    return doctor;
+    const savedDoctor = await this.doctorsRepository.save(doctor);
+    return savedDoctor;
   }
 
   async findOne(id: number) {
@@ -48,51 +46,57 @@ export class DoctorsService {
     });
   }
 
-  async findMany(queryItems) {
-    const { limit, skip, crm, phone, cep, cellphone, ...query } = queryItems;
+  async findMany(queryItems: QueryDoctorDto) {
+    const {
+      limit,
+      skip,
+      crm,
+      phone,
+      cep,
+      cellphone,
+      specialty,
+      name,
+      ...adressQuery
+    } = queryItems;
 
     const queryBuilder = this.doctorsRepository
       .createQueryBuilder('doctor')
-      .select([
-        'doctor.name as name',
-        'doctor.crm as crm',
-        'doctor.phone as phone',
-        'doctor.cellphone as cellphone',
-        'adress.street as street',
-        'adress.city as city',
-        'adress.district ',
-        'adress.state as state',
-        'adress.cep as cep',
-        'speciatly.specialty as speciatly',
-      ])
-      .leftJoin('doctor.adress', 'adress')
-      .leftJoin('doctor.specialties', 'speciatly');
+      .leftJoinAndSelect('doctor.specialties', 'special')
+      .leftJoinAndSelect('doctor.adress', 'adress');
     if (crm) {
-      queryBuilder.andWhere(`crm='${crm}'`);
+      queryBuilder.andWhere(`doctor.crm='${crm}'`);
     }
     if (phone) {
-      queryBuilder.andWhere(`phone='${phone}'`);
+      queryBuilder.andWhere(`doctor.phone='${phone}'`);
     }
     if (cellphone) {
-      queryBuilder.andWhere(`cellphone='${cellphone}'`);
+      queryBuilder.andWhere(`doctor.cellphone='${cellphone}'`);
+    }
+    if (name) {
+      queryBuilder.andWhere(`doctor.name like '%${name}%'`);
     }
     if (cep) {
-      queryBuilder.andWhere(`cep='${cep}'`);
+      queryBuilder.andWhere(`adress.cep='${cep}'`);
     }
-    Object.keys(query).map(function (key) {
-      queryBuilder.andWhere(`${key} like '%${query[key]}%'`);
+    if (specialty) {
+      queryBuilder.andWhere(`special.specialty like '%${specialty}%'`);
+    }
+    Object.keys(adressQuery).map(function (key) {
+      queryBuilder.andWhere(`adress.${key} like '%${adressQuery[key]}%'`);
     });
 
-    queryBuilder.offset(skip || 0).limit(limit || 10);
-    return await queryBuilder.execute();
+    queryBuilder.skip(skip || 0).take(limit || 10);
+    return await queryBuilder.getMany();
   }
 
   async update(id: number, updateDoctorDto: UpdateDoctorDto) {
     await this.doctorsRepository.findOneOrFail(id);
     const { specialties, ...user } = updateDoctorDto;
     if (specialties) {
-      await this.specialtyService.deleteRelation(id);
-      await this.specialtyService.createRelation(specialties, id);
+      const newSpecialty = await this.specialtyService.getSpecialties(
+        specialties,
+      );
+      Object.assign(user, newSpecialty);
     }
     return this.doctorsRepository.update(id, user);
   }
