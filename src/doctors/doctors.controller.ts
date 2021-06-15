@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
@@ -23,6 +24,11 @@ export class DoctorsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.doctorsService.findOne(+id);
+  }
+
+  @Get()
+  findMany(@Query() query: string[]) {
+    return this.doctorsService.findMany(query);
   }
 
   @Patch(':id')
