@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMinSize,
   IsArray,
+  IsInt,
   IsNotEmpty,
-  IsNumber,
   IsString,
   Length,
   Max,
@@ -19,22 +19,22 @@ export class CreateDoctorDto {
   @ApiProperty({ example: 1234567 })
   @IsNotEmpty()
   @Max(9999999)
-  @IsNumber()
+  @IsInt()
   crm: number;
 
   @ApiProperty({ example: 36038030 })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   cep: number;
 
   @ApiProperty({ example: 3230003000 })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   phone: number;
 
   @ApiProperty({ example: 32988888888 })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   cellphone: number;
 
   @ApiProperty({ example: ['Buco maxilo', 'Cardiologia infantil'] })

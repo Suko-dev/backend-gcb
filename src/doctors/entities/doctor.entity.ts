@@ -38,12 +38,15 @@ export class Doctor {
   @JoinTable()
   specialties: Specialty[];
 
-  @DeleteDateColumn({ select: false })
+  @DeleteDateColumn()
+  @Exclude()
   deleted_at: Date;
 
-  @CreateDateColumn({ select: false })
+  @Exclude()
+  @CreateDateColumn()
   created_at: Date;
 
-  @UpdateDateColumn({ select: false })
+  @Exclude()
+  @UpdateDateColumn()
   updated_at: Date;
 }
