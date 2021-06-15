@@ -33,12 +33,12 @@ export class createAdress1623682902348 implements MigrationInterface {
             type: 'int',
           },
           {
-            name: 'updatedAt',
+            name: 'updated_at',
             type: 'timestamp',
             default: 'now()',
           },
           {
-            name: 'createdAt',
+            name: 'created_at',
             type: 'timestamp',
             default: 'now()',
           },

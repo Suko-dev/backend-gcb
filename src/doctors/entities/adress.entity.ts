@@ -26,9 +26,9 @@ export class Adress {
   @Column()
   cep: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @CreateDateColumn({ select: false })
+  created_at: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdateDateColumn({ select: false })
+  updated_at: Date;
 }

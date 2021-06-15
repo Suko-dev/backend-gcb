@@ -20,6 +20,7 @@ export class createDoctor1623682946074 implements MigrationInterface {
           {
             name: 'crm',
             type: 'int',
+            isUnique: true,
           },
           {
             name: 'phone',
@@ -30,24 +31,24 @@ export class createDoctor1623682946074 implements MigrationInterface {
             type: 'bigint',
           },
           {
-            name: 'adress',
+            name: 'adress_id',
             type: 'int',
             isNullable: true,
             default: 'null',
           },
           {
-            name: 'deletedAt',
+            name: 'deleted_at',
             type: 'timestamp',
             isNullable: true,
             default: 'null',
           },
           {
-            name: 'updatedAt',
+            name: 'updated_at',
             type: 'timestamp',
             default: 'now()',
           },
           {
-            name: 'createdAt',
+            name: 'created_at',
             type: 'timestamp',
             default: 'now()',
           },
@@ -57,7 +58,7 @@ export class createDoctor1623682946074 implements MigrationInterface {
             name: 'fkDoctorAdress',
             referencedTableName: 'adress',
             referencedColumnNames: ['id'],
-            columnNames: ['adress'],
+            columnNames: ['adress_id'],
             onDelete: 'SET NULL',
             onUpdate: 'SET NULL',
           },

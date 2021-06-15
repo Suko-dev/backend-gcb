@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -31,11 +32,11 @@ export class Doctor {
   cellphone: number;
 
   @ManyToOne(() => Adress)
-  @JoinColumn({ name: 'adress' })
-  adress_id: Adress;
+  @JoinColumn({ name: 'adress_id' })
+  adress: Adress;
 
-  @Column()
-  adress: number;
+  @Column({ select: false })
+  adress_id: number;
 
   @ManyToMany(() => Specialty)
   @JoinTable({
@@ -45,12 +46,12 @@ export class Doctor {
   })
   specialties: Specialty[];
 
-  @DeleteDateColumn()
-  deletedAt: Date;
+  @DeleteDateColumn({ select: false })
+  deleted_at: Date;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @CreateDateColumn({ select: false })
+  created_at: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdateDateColumn({ select: false })
+  updated_at: Date;
 }

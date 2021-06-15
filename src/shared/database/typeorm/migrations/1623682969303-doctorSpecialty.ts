@@ -21,7 +21,7 @@ export class doctorSpecialty1623682969303 implements MigrationInterface {
             type: 'int',
           },
           {
-            name: 'createdAt',
+            name: 'created_at',
             type: 'timestamp',
             default: 'now()',
           },
