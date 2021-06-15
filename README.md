@@ -24,12 +24,17 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) based application for register new doctors.
 
 ## Installation
 
 ```bash
-$ npm install
+$ docker-compose up
+```
+## Seeding
+
+```bash
+$ npm run typescript:seed
 ```
 
 ## Running the app
@@ -44,7 +49,11 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+## Documentation
 
+```bash
+http://localhost:3000/api-documentation/
+```
 ## Test
 
 ```bash
