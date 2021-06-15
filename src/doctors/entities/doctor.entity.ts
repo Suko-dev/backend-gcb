@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude } from 'class-transformer/';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -17,6 +17,7 @@ import { Specialty } from './specialty.entity';
 @Entity('doctors')
 export class Doctor {
   @PrimaryGeneratedColumn()
+  @Exclude()
   id: number;
 
   @Column({ length: 120 })

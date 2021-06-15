@@ -7,11 +7,14 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('doctors')
 export class DoctorsController {
   constructor(private readonly doctorsService: DoctorsService) {}
@@ -27,7 +30,7 @@ export class DoctorsController {
   }
 
   @Get()
-  findMany(@Query() query: string[]) {
+  findMany(@Query() query) {
     return this.doctorsService.findMany(query);
   }
 
@@ -37,7 +40,8 @@ export class DoctorsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.doctorsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    await this.doctorsService.remove(+id);
+    return `doctor with id: ${id} was removed from database`;
   }
 }
