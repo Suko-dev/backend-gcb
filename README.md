@@ -34,7 +34,7 @@ $ docker-compose up
 ## Seeding
 
 ```bash
-$ npm run typescript:seed
+$ npm run typeorm:seed
 ```
 
 ## Running the app
