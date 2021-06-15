@@ -31,6 +31,11 @@
 ```bash
 $ docker-compose up
 ```
+## Migrations
+
+```bash
+$ npm run typeorm migration:run
+```
 ## Seeding
 
 ```bash
