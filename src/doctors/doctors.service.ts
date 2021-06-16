@@ -91,14 +91,20 @@ export class DoctorsService {
 
   async update(id: number, updateDoctorDto: UpdateDoctorDto) {
     await this.doctorsRepository.findOneOrFail(id);
-    const { specialties, ...user } = updateDoctorDto;
+    const { specialties, cep, ...user } = updateDoctorDto;
+    const newDoctor = new Doctor();
+    Object.assign(newDoctor, user);
     if (specialties) {
       const newSpecialty = await this.specialtyService.getSpecialties(
         specialties,
       );
-      Object.assign(user, newSpecialty);
+      newDoctor.specialties = newSpecialty;
     }
-    return this.doctorsRepository.update(id, user);
+    if (cep) {
+      const newAdress = await this.adressService.findByCep(cep);
+      newDoctor.adress = newAdress;
+    }
+    return await this.doctorsRepository.update(id, newDoctor);
   }
 
   async remove(id: number) {
