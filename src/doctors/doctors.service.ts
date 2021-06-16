@@ -90,15 +90,33 @@ export class DoctorsService {
   }
 
   async update(id: number, updateDoctorDto: UpdateDoctorDto) {
-    await this.doctorsRepository.findOneOrFail(id);
-    const { specialties, ...user } = updateDoctorDto;
+    const entity = await this.doctorsRepository.findOneOrFail({
+      where: { id },
+      relations: ['specialties', 'adress'],
+    });
+    const { specialties, cep, ...user } = updateDoctorDto;
+    const newDoctor = new Doctor();
+    Object.assign(newDoctor, user);
     if (specialties) {
       const newSpecialty = await this.specialtyService.getSpecialties(
         specialties,
       );
-      Object.assign(user, newSpecialty);
+      await this.doctorsRepository
+        .createQueryBuilder()
+        .relation('specialties')
+        .of(entity)
+        .addAndRemove(newSpecialty, entity.specialties);
     }
-    return this.doctorsRepository.update(id, user);
+    if (cep) {
+      const newAdress = await this.adressService.findByCep(cep);
+      newDoctor.adress = newAdress;
+    }
+
+    await this.doctorsRepository.update(id, newDoctor);
+    return await this.doctorsRepository.findOne({
+      where: { id },
+      relations: ['specialties', 'adress'],
+    });
   }
 
   async remove(id: number) {

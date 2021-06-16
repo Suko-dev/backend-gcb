@@ -26,6 +26,9 @@ describe('DoctorsService', () => {
     createQueryBuilder: jest.fn(() => ({
       leftJoinAndSelect: jest.fn().mockReturnThis(),
       take: jest.fn().mockReturnThis(),
+      relation: jest.fn().mockReturnThis(),
+      of: jest.fn().mockReturnThis(),
+      addAndRemove: jest.fn().mockReturnThis(),
       skip: jest.fn().mockReturnThis(),
       andWhere: jest.fn().mockReturnThis(),
       getMany: jest.fn().mockReturnValue([doctor]),
@@ -63,6 +66,7 @@ describe('DoctorsService', () => {
 
   it('should be able to update an existing doctor', async () => {
     jest.spyOn(specService, 'getSpecialties').mockImplementation();
+    jest.spyOn(adressService, 'findByCep').mockImplementation();
     expect(await docService.update(doctor.id, dto)).toBe(doctor);
   });
 

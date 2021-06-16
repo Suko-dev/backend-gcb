@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  ArrayContains,
   ArrayMinSize,
   IsArray,
   IsInt,
@@ -38,8 +39,8 @@ export class CreateDoctorDto {
   cellphone: number;
 
   @ApiProperty({ example: ['Buco maxilo', 'Cardiologia infantil'] })
-  @IsNotEmpty()
   @IsArray()
+  @IsNotEmpty({ each: true })
   @ArrayMinSize(2)
   specialties: string[];
 }
